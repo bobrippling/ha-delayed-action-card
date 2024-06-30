@@ -28,7 +28,7 @@ The Delayed Action Card is a custom Lovelace card for Home Assistant that allows
 1. Add this repository (https://github.com/bhuebschen/delayed-action-card) via HACS Custom repositories [How to add Custom Repositories](https://hacs.xyz/docs/faq/custom_repositories/)
 1. Select `Frontend`
 1. Press add icon and search for `Delayed Action Card`
-1. Select Delayed Action Card repo and install
+1. Select `Delayed Action Card` repo and install
 1. Force refresh the Home Assistant page (<kbd>Ctrl</kbd> + <kbd>F5</kbd> / (<kbd>Shift</kbd> +) <kbd>⌘</kbd> + <kbd>R</kbd>)
 1. Add delayed-action-card to your page
 
@@ -44,6 +44,19 @@ The Delayed Action Card is a custom Lovelace card for Home Assistant that allows
    1. Resource type = `module`
 1. Force refresh the Home Assistant page (<kbd>Ctrl</kbd> + <kbd>F5</kbd> / (<kbd>Shift</kbd> +) <kbd>⌘</kbd> + <kbd>R</kbd>)
 1. Add delayed-action-card to your page
+
+### Performance improvements
+
+While `Delayed Action Card` can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
+
+To do that, add the following to your `configuration.yaml` file and restart Home Assistant and remove it from the Resources:
+
+```yaml
+frontend:
+  extra_module_url:
+    - /hacsfiles/delayed-action-card/delayed-action-card.js
+```
+
 
 ### Usage:
 1. Clicking the floating button toggles the visibility of the circular menu.
