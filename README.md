@@ -5,7 +5,7 @@ The `Delayed Action Card` is a custom Home Assistant card that displays and mana
 [![hacs][hacs-image]][hacs-url]
 [![GitHub Sponsors][gh-sponsors-image]][gh-sponsors-url]
 
-![preview]
+https://github.com/bhuebschen/delayed-action-card/assets/1864448/29967331-d993-42a2-a391-d9b04fb37d50
 
 The Delayed Action Card is a custom Lovelace card for Home Assistant that allows you to create a circular menu of actions or shortcuts. This card provides a visually appealing way to access common actions or navigate to different parts of your Home Assistant dashboard.
 
