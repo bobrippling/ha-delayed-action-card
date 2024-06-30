@@ -78,7 +78,7 @@ MIT © [Benedikt Hübschen][bhuebschen]
 
 <!-- References -->
 
-[preview]: https://github.com/bhuebschen/delayed-action-card/assets/1864448/39352877-43fa-49ce-a517-079e3783a95d
+[preview]: https://github.com/bhuebschen/delayed-action-card/assets/1864448/29967331-d993-42a2-a391-d9b04fb37d50
 [home-assistant]: https://www.home-assistant.io/
 [hacs]: https://hacs.xyz
 [latest-release]: https://github.com/bhuebschen/delayed-action-card/releases/latest
