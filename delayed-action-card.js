@@ -16,7 +16,7 @@ const enabledCards = [
   "mushroom-entity-card",
   "hui-tile-card",
   "hui-weather-forecast-card",
-  "mushroom-weather-card",
+  "mushroom-weather-card"
 ];
 
 async function fetchTasks(hass) {
@@ -883,7 +883,7 @@ window.customCards.push({
 });
 
 console.info(
-  "%c  DELAYED-ACTION-CARD  \n%c  Version: 1.0.0       ",
+  "%c  DELAYED-ACTION-CARD  \n%c  Version: 1.0.1       ",
   "background: #c0c0c0; color: black; font-weight: bold; padding: 5px 0;",
   "color: white; background: #333; font-weight: bold; padding: 5px 0;"
 );
