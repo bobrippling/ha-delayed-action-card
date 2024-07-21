@@ -281,6 +281,32 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                   }
                 });
               }
+              elem = card.querySelectorAll("#states hui-select-entity-row");
+              if (elem.length > 0) {
+                elem.forEach((e) => {
+                  let rowElement = e.shadowRoot.querySelector(
+                    "hui-generic-entity-row, hui-select-entity-row"
+                  );
+                  if (
+                    rowElement.__config.hasOwnProperty("entity") &&
+                    startsWithAny(
+                      rowElement.__config.entity,
+                      homeAssistant.delayedActionConfig.domains
+                    )
+                  ) {
+                    extendCard(
+                      rowElement,
+                      hass,
+                      {
+                        entity: rowElement.__config.entity,
+                      },
+                      tasks,
+                      entityId
+                    );
+                    e.setAttribute("extended", "true");
+                  }
+                });
+              }
             }
           });
           break;
@@ -434,6 +460,7 @@ function getEntityActions(entityId) {
     trigger: "Trigger",
     dock: "Dock",
     start_mowing: "Start Mowing",
+    select_option: "Select Option",
   };
 
   switch (entityId.split(".")[0]) {
@@ -480,6 +507,9 @@ function getEntityActions(entityId) {
     case "lawn_mower":
       result = ["dock", "pause", "start_mowing"];
       break;
+    case "select":
+      result = ["select_option"];
+      break;
     default:
       break;
   }
@@ -503,6 +533,9 @@ function openDialog(hass, entityId) {
   dialog.heading = dialogHeader;
 
   const content = document.createElement("div");
+
+  let selectOptions = entityId.indexOf("select.") > -1 ? `<label for="delayOption">Option</label><select id="delayOption">` + hass.states[entityId].attributes.options.map((option) => `<option value="${option}">${option}</option>`).join("") + `</select>` : ``;
+
   content.innerHTML =
     `
         <style>
@@ -598,9 +631,7 @@ function openDialog(hass, entityId) {
         </style>
         <div class="custom-dialog-content">
           <label for="delayAction">Action</label>
-          <select id="delayAction">` +
-    getEntityActions(entityId) +
-    `</select>
+          <select id="delayAction">` + getEntityActions(entityId) + `</select>` + selectOptions + `
           <label for="delayTime">Delay for</label>
           <div id="delayTime" class="time-input">
             <div class="time-control">
@@ -636,6 +667,7 @@ function openDialog(hass, entityId) {
     const seconds = parseInt(delaySeconds.value, 10) || 0;
     const date = delayDate.value;
     const action = content.querySelector("#delayAction").value || "turn_on";
+    const select = content.querySelector("#delayOption");
 
     if (hours === 0 && minutes === 0 && seconds === 0 && !date) {
       content.querySelector("#error").innerText =
@@ -649,6 +681,9 @@ function openDialog(hass, entityId) {
     let config = {
       entity_id: entityId,
       action: action,
+      data: {
+        option: select ? select.value : null
+      },
     };
 
     if (date) {
