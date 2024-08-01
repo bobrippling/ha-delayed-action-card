@@ -508,7 +508,8 @@ function getEntityActions(entityId) {
       result = ["dock", "pause", "start_mowing"];
       break;
     case "select":
-      result = ["select_option"];
+    case "input_select":
+        result = ["select_option"];
       break;
     default:
       break;
@@ -680,11 +681,12 @@ function openDialog(hass, entityId) {
 
     let config = {
       entity_id: entityId,
-      action: action,
-      data: {
-        option: select ? select.value : null
-      },
+      action: action
     };
+
+    if(select != null || select != undefined) {
+      config.data.option = select.value;
+    }
 
     if (date) {
       config.datetime = date;
@@ -918,7 +920,7 @@ window.customCards.push({
 });
 
 console.info(
-  "%c  DELAYED-ACTION-CARD  \n%c  Version: 1.0.1       ",
+  "%c  DELAYED-ACTION-CARD  \n%c  Version: 1.0.2       ",
   "background: #c0c0c0; color: black; font-weight: bold; padding: 5px 0;",
   "color: white; background: #333; font-weight: bold; padding: 5px 0;"
 );
