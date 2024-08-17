@@ -16,7 +16,11 @@ const enabledCards = [
   "mushroom-entity-card",
   "hui-tile-card",
   "hui-weather-forecast-card",
-  "mushroom-weather-card"
+  "mushroom-fan-card",
+  "mushroom-thermostat-card",
+  "mushroom-lock-card",
+  "mushroom-vacuum-card",
+  "mushroom-select-card",
 ];
 
 async function fetchTasks(hass) {
@@ -107,9 +111,21 @@ function extendButtonCard(element, hass, config, tasks, entityId) {
 }
 
 function extendTileCard(element, hass, config, tasks, entityId) {
-  const container = element.shadowRoot.querySelector("ha-card .content");
+  const haCard = element.shadowRoot.querySelector("ha-card");
+  let container;
+  let resizedButton = false;
+  if (element.parentElement.parentElement.style.cssText.indexOf("column-size") > -1) {
+    container = haCard;
+    resizedButton = true;
+  } else {
+    container = haCard.querySelector(".content");
+  }
   if (container.querySelector(".cornerButton")) {
     const innerDiv = container.querySelector(".cornerButton div");
+    if(resizedButton) {
+      innerDiv.parentElement.style.top = "50%";
+      innerDiv.parentElement.style.marginTop = "-11px";
+    }
     if (
       tasks &&
       Object.values(tasks).length > 0 &&
@@ -126,10 +142,9 @@ function extendTileCard(element, hass, config, tasks, entityId) {
   cardElements(container, hass, config, "-6px");
 }
 
-function cardElements(element, hass, config, offset) {
-  // Füge eine Schaltfläche zur bestehenden Karte hinzu
+function cardElements(element, hass, config, offset, additionalClass) {
   const cornerButton = document.createElement("div");
-  cornerButton.className = "cornerButton";
+  cornerButton.className = "cornerButton" + (additionalClass ? " " + additionalClass : "");
   cornerButton.style.position = "absolute";
   cornerButton.style.right =
     offset !== undefined && offset !== "" && offset.length > 0
@@ -153,7 +168,7 @@ function cardElements(element, hass, config, offset) {
   innerDiv.style.top = "6px";
   innerDiv.style.left = "6px";
   innerDiv.style.position = "relative";
-  innerDiv.style.backgroundColor = "#c0c0c0";
+  innerDiv.style.backgroundColor = "var(--disabled-text-color)";
   cornerButton.appendChild(innerDiv);
 
   const timerDialog = document.createElement("div");
@@ -356,7 +371,12 @@ function findAndExtendCards(element, hass, tasks, entityId) {
           }
           break;
         case "MUSHROOM-LIGHT-CARD":
+        case "MUSHROOM-FAN-CARD":
+        case "MUSHROOM-THERMOSTAT-CARD":
+        case "MUSHROOM-LOCK-CARD":
+        case "MUSHROOM-VACUUM-CARD":
         case "MUSHROOM-ENTITY-CARD":
+        case "MUSHROOM-SELECT-CARD":
           if (
             element.___config.hasOwnProperty("entity") &&
             startsWithAny(

@@ -1,3 +1,14 @@
+### 1.0.3 (2024-08-17)
+
+Added support for:
+* Light-Card
+* Mushroom-Select
+* Mushroom-Fan
+* Mushroom-Lock
+* Mushroom-Vacuum
+
+Fixed offset on Mushroom-Cards
+
 ### 1.0.2 (2024-08-01)
 
 Fix: error on actions without additional data
