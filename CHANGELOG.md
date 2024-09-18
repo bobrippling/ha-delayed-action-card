@@ -1,3 +1,12 @@
+### 1.0.4 (2024-09-18)
+
+Added support for:
+* Cover-Card
+* Mushroom-Cover-Card
+
+Removed:
+* Support for weather and forecast-Cards (it's a pity.. but even delayed actions cannot change the weather...)
+
 ### 1.0.3 (2024-08-17)
 
 Added support for:

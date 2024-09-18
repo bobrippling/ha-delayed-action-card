@@ -15,12 +15,15 @@ const enabledCards = [
   "mushroom-light-card",
   "mushroom-entity-card",
   "hui-tile-card",
-  "hui-weather-forecast-card",
   "mushroom-fan-card",
   "mushroom-thermostat-card",
   "mushroom-lock-card",
   "mushroom-vacuum-card",
   "mushroom-select-card",
+  "bubble-card",
+  "mushroom-template-badge",
+  "hui-entity-badge",
+  "mushroom-cover-card"
 ];
 
 async function fetchTasks(hass) {
@@ -87,7 +90,7 @@ function extendMushroomCard(element, hass, config, tasks, entityId) {
     }
     return;
   }
-  cardElements(container, hass, config);
+  cardElements(container, hass, config, '-6px');
 }
 
 function extendButtonCard(element, hass, config, tasks, entityId) {
@@ -142,6 +145,44 @@ function extendTileCard(element, hass, config, tasks, entityId) {
   cardElements(container, hass, config, "-6px");
 }
 
+function extendBadge(element, hass, config, tasks, entityId) {
+  const container = element;
+  if (container.querySelector(".cornerButton")) {
+    const innerDiv = container.querySelector(".cornerButton div");
+    if (
+      tasks &&
+      Object.values(tasks).length > 0 &&
+      config.entity === entityId
+    ) {
+      innerDiv.style.backgroundColor = "var(--accent-color)";
+      innerDiv.className = "blink";
+    } else {
+      innerDiv.style.backgroundColor = "var(--disabled-text-color)";
+      innerDiv.className = "";
+    }
+    return;
+  }
+  cardElementsBottom(container, hass, config, "-6px");
+}
+
+function cardElementsBottom(element, hass, config, offset, additionalClass) {
+  cardElements(element, hass, config, offset, additionalClass);
+  const cornerButton = element.querySelector(".cornerButton");
+  cornerButton.style.right = null;
+  cornerButton.style.bottom = "-5px";
+  cornerButton.style.width = "12px";
+  cornerButton.style.height = "12px";
+  cornerButton.style.borderRight = null
+  cornerButton.style.borderBottom =
+  "solid 1px var(--ha-card-border-color, var(--divider-color, #e0e0e0))";
+
+  const cornerButtonIndicator = cornerButton.querySelector(".cornerButtonIndicator");
+  cornerButtonIndicator.style.width = "6px";
+  cornerButtonIndicator.style.height = "6px";
+  cornerButtonIndicator.style.top = "3px";
+  cornerButtonIndicator.style.left = "3px";
+}
+
 function cardElements(element, hass, config, offset, additionalClass) {
   const cornerButton = document.createElement("div");
   cornerButton.className = "cornerButton" + (additionalClass ? " " + additionalClass : "");
@@ -162,6 +203,7 @@ function cardElements(element, hass, config, offset, additionalClass) {
   cornerButton.style.zIndex = "1";
 
   const innerDiv = document.createElement("div");
+  innerDiv.className = "cornerButtonIndicator";
   innerDiv.style.borderRadius = "20px";
   innerDiv.style.width = "11px";
   innerDiv.style.height = "11px";
@@ -270,14 +312,14 @@ function findAndExtendCards(element, hass, tasks, entityId) {
           cardElements.forEach((card) => {
             // EntityCard
             if (card.getAttribute("extended") !== "true") {
-              let elem = card.querySelectorAll("#states hui-toggle-entity-row");
+              let elem = card.querySelectorAll("#states hui-toggle-entity-row, #states hui-cover-entity-row");
               if (elem.length > 0) {
                 elem.forEach((e) => {
                   let rowElement = e.shadowRoot.querySelector(
                     "hui-generic-entity-row, hui-toggle-entity-row"
                   );
                   if (
-                    rowElement.__config.hasOwnProperty("entity") &&
+                    rowElement.__config.hasOwnProperty("entity") && rowElement.__config.entity !== undefined &&
                     startsWithAny(
                       rowElement.__config.entity,
                       homeAssistant.delayedActionConfig.domains
@@ -296,14 +338,14 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                   }
                 });
               }
-              elem = card.querySelectorAll("#states hui-select-entity-row");
+              elem = card.querySelectorAll("#states hui-toggle-entity-row, #states hui-cover-entity-row");
               if (elem.length > 0) {
                 elem.forEach((e) => {
                   let rowElement = e.shadowRoot.querySelector(
                     "hui-generic-entity-row, hui-select-entity-row"
                   );
                   if (
-                    rowElement.__config.hasOwnProperty("entity") &&
+                    rowElement.__config.hasOwnProperty("entity") && rowElement.__config.entity !== undefined &&
                     startsWithAny(
                       rowElement.__config.entity,
                       homeAssistant.delayedActionConfig.domains
@@ -328,7 +370,7 @@ function findAndExtendCards(element, hass, tasks, entityId) {
         case "HUI-BUTTON-CARD":
           // ButtonCard
           if (
-            element.___config.hasOwnProperty("entity") &&
+            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
             startsWithAny(
               element.___config.entity,
               homeAssistant.delayedActionConfig.domains
@@ -348,9 +390,11 @@ function findAndExtendCards(element, hass, tasks, entityId) {
               "visible";
           }
           break;
+        case "HUI-COVER-CARD":
+        case "HUI-LIGHT-CARD":
         case "HUI-TILE-CARD":
           if (
-            element.___config.hasOwnProperty("entity") &&
+            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
             startsWithAny(
               element.___config.entity,
               homeAssistant.delayedActionConfig.domains
@@ -372,13 +416,14 @@ function findAndExtendCards(element, hass, tasks, entityId) {
           break;
         case "MUSHROOM-LIGHT-CARD":
         case "MUSHROOM-FAN-CARD":
+        case "MUSHROOM-COVER-CARD":
         case "MUSHROOM-THERMOSTAT-CARD":
         case "MUSHROOM-LOCK-CARD":
         case "MUSHROOM-VACUUM-CARD":
         case "MUSHROOM-ENTITY-CARD":
         case "MUSHROOM-SELECT-CARD":
           if (
-            element.___config.hasOwnProperty("entity") &&
+            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
             startsWithAny(
               element.___config.entity,
               homeAssistant.delayedActionConfig.domains
@@ -386,6 +431,28 @@ function findAndExtendCards(element, hass, tasks, entityId) {
           ) {
             extendMushroomCard(
               element,
+              hass,
+              {
+                entity: element ? element.___config.entity : null,
+              },
+              tasks,
+              entityId
+            );
+            element.setAttribute("extended", "true");
+          }
+          break;
+        case "MUSHROOM-TEMPLATE-BADGE":
+        case "HUI-ENTITY-BADGE":
+          if (
+            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
+            startsWithAny(
+              element.___config.entity,
+              homeAssistant.delayedActionConfig.domains
+            )
+          ) {
+            const targetElement = element.shadowRoot.children[0];
+            extendBadge(
+              targetElement,
               hass,
               {
                 entity: element ? element.___config.entity : null,
@@ -940,7 +1007,7 @@ window.customCards.push({
 });
 
 console.info(
-  "%c  DELAYED-ACTION-CARD  \n%c  Version: 1.0.2       ",
+  "%c  DELAYED-ACTION-CARD  \n%c  Version: 1.0.4       ",
   "background: #c0c0c0; color: black; font-weight: bold; padding: 5px 0;",
   "color: white; background: #333; font-weight: bold; padding: 5px 0;"
 );
