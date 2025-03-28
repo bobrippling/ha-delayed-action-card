@@ -265,7 +265,7 @@ function cardElements(element, hass, config, offset, additionalClass) {
     e.preventDefault();
     e.stopPropagation();
     //timerDialog.style.display = "block";
-    openDialog(hass, config.entity);
+    openDialog(hass, config.entity, e.target.classList.contains("blink"));
   });
 
   cornerButton.addEventListener("mousedown", (e) => {
@@ -606,7 +606,7 @@ function getEntityActions(entityId) {
     .join("");
 }
 
-function openDialog(hass, entityId) {
+function openDialog(hass, entityId, alreadyScheduled) {
   const dialog = document.createElement("ha-dialog");
   dialog.open = true;
 
@@ -717,7 +717,9 @@ function openDialog(hass, entityId) {
             width: 100%;
           }
         </style>
-        <div class="custom-dialog-content">
+        <div class="custom-dialog-content">` + (
+          alreadyScheduled ? "<label style='color: var(--accent-color);'>(Schedule already set)</label>" : ""
+        ) + `
           <label for="delayAction">Action</label>
           <select id="delayAction">` + getEntityActions(entityId) + `</select>` + selectOptions + `
           <label for="delayTime">Delay for</label>
