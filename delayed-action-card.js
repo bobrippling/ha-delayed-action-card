@@ -549,6 +549,8 @@ function getEntityActions(entityId) {
     start_mowing: "Start Mowing",
     select_option: "Select Option",
   };
+  const state = document.querySelector("home-assistant")?.hass.states[entityId].state;
+  let defaultIndex;
 
   switch (entityId.split(".")[0]) {
     case "light":
@@ -560,6 +562,7 @@ function getEntityActions(entityId) {
     case "siren":
     case "water_heater":
       result = ["turn_on", "turn_off", "toggle"];
+      defaultIndex = state === "on" ? 1 : 0;
       break;
     case "media_player":
       result = [
@@ -590,6 +593,7 @@ function getEntityActions(entityId) {
       break;
     case "automation":
       result = ["turn_on", "turn_off", "trigger"];
+      defaultIndex = state === "on" ? 1 : 0;
       break;
     case "lawn_mower":
       result = ["dock", "pause", "start_mowing"];
@@ -602,7 +606,7 @@ function getEntityActions(entityId) {
       break;
   }
   return result
-    .map((action) => `<option value="${action}">${titles[action]}</option>`)
+    .map((action, i) => `<option value="${action}"${i === defaultIndex ? " selected" : ""}>${titles[action]}</option>`)
     .join("");
 }
 
