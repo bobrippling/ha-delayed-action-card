@@ -616,7 +616,7 @@ function openDialog(hass, entityId, alreadyScheduled) {
   dialogHeader.style.alignItems = "start";
   dialogHeader.innerHTML = `
       <ha-icon-button id="closeButton" style="background: none; border: none; font-size: 36px; cursor: pointer;">&times;</ha-icon-button>
-      <p style="margin: 9px 0 0 0" title='Delayed Action'>Delayed Action</p>
+      <p style="margin: 9px 0 0 0" title='Delayed Action'>Delayed Action: ${hass.entities[entityId].name ?? entityId}</p>
     `;
   dialog.heading = dialogHeader;
 
