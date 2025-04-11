@@ -864,12 +864,18 @@ const getConfig = async (hass) => {
 
 setupCustomExtension();
 
-setInterval(() => {
+const tryFetch = async () => {
   const homeAssistant = document.querySelector("home-assistant");
   if (homeAssistant && homeAssistant.hass) {
-    fetchTasks(homeAssistant.hass);
+    await fetchTasks(homeAssistant.hass);
+    setTimeout(tryFetch, 10000);
+  } else {
+    setTimeout(tryFetch, 250);
   }
-}, 10000);
+}
+setTimeout(() => {
+  tryFetch();
+}, 500);
 
 class DelayedActionCard extends HTMLElement {
   setConfig(config) {
