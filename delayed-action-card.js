@@ -495,7 +495,7 @@ async function _updateContent(hass, actions) {
   });
 }
 
-function setupCustomExtension() {
+async function setupCustomExtension() {
   const homeAssistant = document.querySelector("home-assistant");
   if (homeAssistant && homeAssistant.hass) {
     homeAssistant.hass.connection.subscribeEvents((event) => {
@@ -508,9 +508,8 @@ function setupCustomExtension() {
         _updateContent(homeAssistant.hass, event.data.actions);
       }
     });
-    getConfig(homeAssistant.hass);
+    await getConfig(homeAssistant.hass);
     applyCardModifications(homeAssistant.hass);
-    fetchTasks(homeAssistant.hass);
   } else {
     setTimeout(setupCustomExtension, 500);
   }
@@ -863,7 +862,7 @@ const getConfig = async (hass) => {
   });
 };
 
-window.setTimeout(setupCustomExtension, 500);
+setupCustomExtension();
 
 setInterval(() => {
   const homeAssistant = document.querySelector("home-assistant");
