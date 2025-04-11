@@ -497,24 +497,22 @@ async function _updateContent(hass, actions) {
 
 function setupCustomExtension() {
   const homeAssistant = document.querySelector("home-assistant");
-  if (homeAssistant) {
-    if (homeAssistant.hass) {
-      homeAssistant.hass.connection.subscribeEvents((event) => {
-        if (event.event_type === "delayed_action_get_config_response") {
-          homeAssistant.delayedActionConfig = event.data;
-        }
-      });
-      homeAssistant.hass.connection.subscribeEvents((event) => {
-        if (event.event_type === "delayed_action_list_actions_response") {
-          _updateContent(homeAssistant.hass, event.data.actions);
-        }
-      });
-      getConfig(homeAssistant.hass);
-      applyCardModifications(homeAssistant.hass);
-      fetchTasks(homeAssistant.hass);
-    } else {
-      window.setTimeout(setupCustomExtension, 500);
-    }
+  if (homeAssistant && homeAssistant.hass) {
+    homeAssistant.hass.connection.subscribeEvents((event) => {
+      if (event.event_type === "delayed_action_get_config_response") {
+        homeAssistant.delayedActionConfig = event.data;
+      }
+    });
+    homeAssistant.hass.connection.subscribeEvents((event) => {
+      if (event.event_type === "delayed_action_list_actions_response") {
+        _updateContent(homeAssistant.hass, event.data.actions);
+      }
+    });
+    getConfig(homeAssistant.hass);
+    applyCardModifications(homeAssistant.hass);
+    fetchTasks(homeAssistant.hass);
+  } else {
+    setTimeout(setupCustomExtension, 500);
   }
 }
 
