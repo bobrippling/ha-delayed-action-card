@@ -28,11 +28,13 @@ const enabledCards = [
 
 async function fetchTasks(hass) {
   try {
+    //console.log(new Date().toISOString() + ": fetchTasks() begin");
     const response = await hass.callWS({
       type: "call_service",
       domain: "delayed_action",
       service: "list",
     });
+    //console.log(new Date().toISOString() + ": fetchTasks() end");
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }
@@ -498,19 +500,25 @@ async function _updateContent(hass, actions) {
 async function setupCustomExtension() {
   const homeAssistant = document.querySelector("home-assistant");
   if (homeAssistant && homeAssistant.hass) {
+    //console.log("setupCustomExtension(): have HA & HA.hass");
     homeAssistant.hass.connection.subscribeEvents((event) => {
       if (event.event_type === "delayed_action_get_config_response") {
+        //console.log("got (config) event", event);
         homeAssistant.delayedActionConfig = event.data;
       }
     });
     homeAssistant.hass.connection.subscribeEvents((event) => {
       if (event.event_type === "delayed_action_list_actions_response") {
+        //console.log("got (action) event - _updateContent()", event);
         _updateContent(homeAssistant.hass, event.data.actions);
       }
     });
     await getConfig(homeAssistant.hass);
+    //console.log("getConfig done, applyCardModifications()");
     applyCardModifications(homeAssistant.hass);
+    //fetchTasks(homeAssistant.hass);
   } else {
+    //console.log("setupCustomExtension(): no HA/hass yet");
     setTimeout(setupCustomExtension, 500);
   }
 }
@@ -857,9 +865,11 @@ function openDialog(hass, entityId, alreadyScheduled) {
 }
 
 const getConfig = async (hass) => {
+  //console.log(new Date().toISOString() + ": getConfig() begin");
   await hass.callService("delayed_action", "get_config").catch((error) => {
     console.error("Error fetching config:", error);
   });
+  //console.log(new Date().toISOString() + ": getConfig() end");
 };
 
 setupCustomExtension();
@@ -874,6 +884,7 @@ const tryFetch = async () => {
   }
 }
 setTimeout(() => {
+  //console.log(new Date().toISOString() + ": initial load, fetching...");
   tryFetch();
 }, 500);
 
