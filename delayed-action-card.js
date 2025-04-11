@@ -928,7 +928,16 @@ class DelayedActionCard extends HTMLElement {
   }
 
   render() {
-    if (!this.hass || !this.tasks) return;
+    if (!this.hass || !this.tasks) {
+      this.shadowRoot.innerHTML = `
+        <ha-card header="Delayed Actions">
+          <div class="tasks">
+            Loading ${!this.hass ? "HA data" : "Tasks"}...
+          </div>
+        </ha-card>
+      `;
+      return;
+    }
 
     let taskList = "";
     for (const [entityId, tasks] of Object.entries(this.tasks)) {
