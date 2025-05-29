@@ -253,11 +253,11 @@ function extendBadge(element: HassElement, hass: Hass, config: Config, tasks: Ta
 function cardElementsBottom(element: HassElement, hass: Hass, config: Config, offset?: string, additionalClass?: string) {
   cardElements(element, hass, config, offset, additionalClass);
   const cornerButton = element.querySelector(".cornerButton")! as HTMLElement;
-  cornerButton.style.right = null;
+  cornerButton.style.right = "";
   cornerButton.style.bottom = "-5px";
   cornerButton.style.width = "12px";
   cornerButton.style.height = "12px";
-  cornerButton.style.borderRight = null;
+  cornerButton.style.borderRight = "";
   cornerButton.style.borderBottom =
   "solid 1px var(--ha-card-border-color, var(--divider-color, #e0e0e0))";
 
@@ -567,7 +567,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
 async function applyCardModifications(hass: Hass) {
   const cards = deepQuerySelectorAll(enabledCards.join(","));
   cards.forEach((element) => {
-    findAndExtendCards(element as HassElement, hass, []);
+    findAndExtendCards(element as HassElement, hass, {} /*[]*/);
   });
 }
 
@@ -871,7 +871,7 @@ function openDialog(hass: Hass, entityId: EntityId, alreadyScheduled: boolean) {
     };
 
     if(select != null) {
-      config.data.option = select.value;
+      config.data = { option: select.value };
     }
 
     if (date) {
@@ -1016,7 +1016,7 @@ class DelayedActionCard extends HTMLElement {
 
   getFriendlyName(entityId: EntityId): string {
     const entity = this.hass!.states[entityId];
-    return entity ? entity.attributes.friendly_name : entityId;
+    return entity?.attributes.friendly_name ?? entityId;
   }
 
   getActionIcon(action: Action) {
@@ -1058,7 +1058,7 @@ class DelayedActionCard extends HTMLElement {
                 ? "turn on"
                 : task.action == "turn_off"
                 ? "turn off"
-                : task.action == "turn_off"
+                : task.action == "toggle"
                 ? "toggle"
                 : task.action
             }</span>
