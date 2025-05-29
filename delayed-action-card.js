@@ -62,7 +62,7 @@ function extendCard(element, hass, config, tasks, entityId) {
         // Überprüfen, ob die Entität in den Tasks enthalten ist und das innerDiv entsprechend einfärben
         if (tasks &&
             Object.values(tasks).length > 0 &&
-            element.__config.entity === entityId) {
+            element.config.entity === entityId) {
             innerDiv.style.backgroundColor = "var(--accent-color)"; // Task existiert
             innerDiv.className = "blink";
         }
@@ -82,7 +82,7 @@ function extendMushroomCard(element, hass, config, tasks, entityId) {
         const innerDiv = container.querySelector(".cornerButton div");
         if (tasks &&
             Object.values(tasks).length > 0 &&
-            element.___config.entity === entityId) {
+            element.config.entity === entityId) {
             innerDiv.style.backgroundColor = "var(--accent-color)";
             innerDiv.className = "blink";
         }
@@ -100,7 +100,7 @@ function extendButtonCard(element, hass, config, tasks, entityId) {
         const innerDiv = container.querySelector(".cornerButton div");
         if (tasks &&
             Object.values(tasks).length > 0 &&
-            element.___config.entity === entityId) {
+            element.config.entity === entityId) {
             innerDiv.style.backgroundColor = "var(--accent-color)";
             innerDiv.className = "blink";
         }
@@ -131,7 +131,7 @@ function extendTileCard(element, hass, config, tasks, entityId) {
         }
         if (tasks &&
             Object.values(tasks).length > 0 &&
-            element.___config.entity === entityId) {
+            element.config.entity === entityId) {
             innerDiv.style.backgroundColor = "var(--accent-color)";
             innerDiv.className = "blink";
         }
@@ -300,10 +300,10 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                             if (elem.length > 0) {
                                 elem.forEach((e) => {
                                     let rowElement = e.shadowRoot.querySelector("hui-generic-entity-row, hui-toggle-entity-row");
-                                    if (rowElement.__config.hasOwnProperty("entity") && rowElement.__config.entity !== undefined &&
-                                        startsWithAny(rowElement.__config.entity, config.domains)) {
+                                    if (rowElement.config.hasOwnProperty("entity") && rowElement.config.entity !== undefined &&
+                                        startsWithAny(rowElement.config.entity, config.domains)) {
                                         extendCard(rowElement, hass, {
-                                            entity: rowElement.__config.entity,
+                                            entity: rowElement.config.entity,
                                         }, tasks, entityId);
                                         e.setAttribute("extended", "true");
                                     }
@@ -313,10 +313,10 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                             if (elem.length > 0) {
                                 elem.forEach((e) => {
                                     let rowElement = e.shadowRoot.querySelector("hui-generic-entity-row, hui-select-entity-row");
-                                    if (rowElement.__config.hasOwnProperty("entity") && rowElement.__config.entity !== undefined &&
-                                        startsWithAny(rowElement.__config.entity, config.domains)) {
+                                    if (rowElement.config.hasOwnProperty("entity") && rowElement.config.entity !== undefined &&
+                                        startsWithAny(rowElement.config.entity, config.domains)) {
                                         extendCard(rowElement, hass, {
-                                            entity: rowElement.__config.entity,
+                                            entity: rowElement.config.entity,
                                         }, tasks, entityId);
                                         e.setAttribute("extended", "true");
                                     }
@@ -327,10 +327,10 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                     break;
                 case "HUI-BUTTON-CARD":
                     // ButtonCard
-                    if (element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
-                        startsWithAny(element.___config.entity, config.domains)) {
+                    if (element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
+                        startsWithAny(element.config.entity, config.domains)) {
                         extendButtonCard(element, hass, {
-                            entity: element.___config.entity,
+                            entity: element.config.entity,
                         }, tasks, entityId);
                         element.setAttribute("extended", "true");
                         element.shadowRoot.querySelector("ha-card").style.overflow =
@@ -340,10 +340,10 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                 case "HUI-COVER-CARD":
                 case "HUI-LIGHT-CARD":
                 case "HUI-TILE-CARD":
-                    if (element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
-                        startsWithAny(element.___config.entity, config.domains)) {
+                    if (element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
+                        startsWithAny(element.config.entity, config.domains)) {
                         extendTileCard(element, hass, {
-                            entity: element.___config.entity,
+                            entity: element.config.entity,
                         }, tasks, entityId);
                         element.setAttribute("extended", "true");
                         element.shadowRoot.querySelector("ha-card").style.overflow =
@@ -358,21 +358,21 @@ function findAndExtendCards(element, hass, tasks, entityId) {
                 case "MUSHROOM-VACUUM-CARD":
                 case "MUSHROOM-ENTITY-CARD":
                 case "MUSHROOM-SELECT-CARD":
-                    if (element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
-                        startsWithAny(element.___config.entity, config.domains)) {
+                    if (element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
+                        startsWithAny(element.config.entity, config.domains)) {
                         extendMushroomCard(element, hass, {
-                            entity: element.___config.entity,
+                            entity: element.config.entity,
                         }, tasks, entityId);
                         element.setAttribute("extended", "true");
                     }
                     break;
                 case "MUSHROOM-TEMPLATE-BADGE":
                 case "HUI-ENTITY-BADGE":
-                    if (element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
-                        startsWithAny(element.___config.entity, config.domains)) {
+                    if (element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
+                        startsWithAny(element.config.entity, config.domains)) {
                         const targetElement = element.shadowRoot.children[0];
                         extendBadge(targetElement, hass, {
-                            entity: element.___config.entity,
+                            entity: element.config.entity,
                         }, tasks, entityId);
                         element.setAttribute("extended", "true");
                     }

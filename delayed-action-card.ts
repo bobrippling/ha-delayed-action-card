@@ -66,8 +66,7 @@ type Config = {
 type EntityId = string;
 
 interface HassElement extends HTMLElement {
-  __config: Config;
-  ___config: Config;
+  config: Config;
 }
 
 interface HassRootElement extends Element {
@@ -142,7 +141,7 @@ function extendCard(element: HassElement, hass: Hass, config: Config, tasks: Tas
     if (
       tasks &&
       Object.values(tasks).length > 0 &&
-      element.__config.entity === entityId
+      element.config.entity === entityId
     ) {
       innerDiv.style.backgroundColor = "var(--accent-color)"; // Task existiert
       innerDiv.className = "blink";
@@ -165,7 +164,7 @@ function extendMushroomCard(element: HassElement, hass: Hass, config: Config, ta
     if (
       tasks &&
       Object.values(tasks).length > 0 &&
-      element.___config.entity === entityId
+      element.config.entity === entityId
     ) {
       innerDiv.style.backgroundColor = "var(--accent-color)";
       innerDiv.className = "blink";
@@ -185,7 +184,7 @@ function extendButtonCard(element: HassElement, hass: Hass, config: Config, task
     if (
       tasks &&
       Object.values(tasks).length > 0 &&
-      element.___config.entity === entityId
+      element.config.entity === entityId
     ) {
       innerDiv.style.backgroundColor = "var(--accent-color)";
       innerDiv.className = "blink";
@@ -217,7 +216,7 @@ function extendTileCard(element: HassElement, hass: Hass, config: Config, tasks:
     if (
       tasks &&
       Object.values(tasks).length > 0 &&
-      element.___config.entity === entityId
+      element.config.entity === entityId
     ) {
       innerDiv.style.backgroundColor = "var(--accent-color)";
       innerDiv.className = "blink";
@@ -405,9 +404,9 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
                     "hui-generic-entity-row, hui-toggle-entity-row"
                   ) as HassElement;
                   if (
-                    rowElement.__config.hasOwnProperty("entity") && rowElement.__config.entity !== undefined &&
+                    rowElement.config.hasOwnProperty("entity") && rowElement.config.entity !== undefined &&
                     startsWithAny(
-                      rowElement.__config.entity,
+                      rowElement.config.entity,
                       config.domains
                     )
                   ) {
@@ -415,7 +414,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
                       rowElement,
                       hass,
                       {
-                        entity: rowElement.__config.entity,
+                        entity: rowElement.config.entity,
                       },
                       tasks,
                       entityId
@@ -431,9 +430,9 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
                     "hui-generic-entity-row, hui-select-entity-row"
                   ) as HassElement;
                   if (
-                    rowElement.__config.hasOwnProperty("entity") && rowElement.__config.entity !== undefined &&
+                    rowElement.config.hasOwnProperty("entity") && rowElement.config.entity !== undefined &&
                     startsWithAny(
-                      rowElement.__config.entity,
+                      rowElement.config.entity,
                       config.domains
                     )
                   ) {
@@ -441,7 +440,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
                       rowElement,
                       hass,
                       {
-                        entity: rowElement.__config.entity,
+                        entity: rowElement.config.entity,
                       },
                       tasks,
                       entityId
@@ -456,9 +455,9 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
         case "HUI-BUTTON-CARD":
           // ButtonCard
           if (
-            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
+            element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
             startsWithAny(
-              element.___config.entity,
+              element.config.entity,
               config.domains
             )
           ) {
@@ -466,7 +465,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
               element,
               hass,
               {
-                entity: element.___config.entity,
+                entity: element.config.entity,
               },
               tasks,
               entityId
@@ -480,9 +479,9 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
         case "HUI-LIGHT-CARD":
         case "HUI-TILE-CARD":
           if (
-            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
+            element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
             startsWithAny(
-              element.___config.entity,
+              element.config.entity,
               config.domains
             )
           ) {
@@ -490,7 +489,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
               element,
               hass,
               {
-                entity: element.___config.entity,
+                entity: element.config.entity,
               },
               tasks,
               entityId
@@ -509,9 +508,9 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
         case "MUSHROOM-ENTITY-CARD":
         case "MUSHROOM-SELECT-CARD":
           if (
-            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
+            element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
             startsWithAny(
-              element.___config.entity,
+              element.config.entity,
               config.domains
             )
           ) {
@@ -519,7 +518,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
               element,
               hass,
               {
-                entity: element.___config.entity,
+                entity: element.config.entity,
               },
               tasks,
               entityId
@@ -530,9 +529,9 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
         case "MUSHROOM-TEMPLATE-BADGE":
         case "HUI-ENTITY-BADGE":
           if (
-            element.___config.hasOwnProperty("entity") && element.___config.entity !== undefined &&
+            element.config.hasOwnProperty("entity") && element.config.entity !== undefined &&
             startsWithAny(
-              element.___config.entity,
+              element.config.entity,
               config.domains
             )
           ) {
@@ -541,7 +540,7 @@ function findAndExtendCards(element: HassElement, hass: Hass, tasks: Tasks, enti
               targetElement,
               hass,
               {
-                entity: element.___config.entity,
+                entity: element.config.entity,
               },
               tasks,
               entityId
