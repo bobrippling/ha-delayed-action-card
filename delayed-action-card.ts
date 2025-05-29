@@ -977,7 +977,6 @@ setTimeout(() => {
 
 class DelayedActionCard extends HTMLElement {
   config: Config | undefined;
-  // @ts-ignore
   _hass?: Hass;
   tasks?: Actions;
 
